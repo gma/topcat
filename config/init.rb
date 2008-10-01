@@ -1,3 +1,5 @@
+$KCODE = 'UTF8'
+
 #
 # ==== Structure of Merb initializer
 #
@@ -33,34 +35,45 @@
 # Remember that bundling of dependencies as gems with your application
 # makes it independent of the environment it runs in and is a very
 # good, encouraged practice to follow.
-Gem.clear_paths
-Gem.path.unshift(Merb.root / "gems")
 
 # If you want modules and classes from libraries organized like
 # merbapp/lib/magicwand/lib/magicwand.rb to autoload,
 # uncomment this.
 # Merb.push_path(:lib, Merb.root / "lib") # uses **/*.rb as path glob.
 
-
-
-
 # ==== Dependencies
 
-# These are some examples of how you might specify dependencies.
-# Dependency loading is delayed to a later Merb app
-# boot stage, but it may be important when
-# another part of your configuration relies on libraries specified
-# here.
+# These are a few, but not all, of the standard merb-more dependencies:
 #
-# dependencies "RedCloth", "merb_helpers"
-# OR
-# dependency "RedCloth", "> 3.0"
-# OR
-# dependencies "RedCloth" => "> 3.0", "ruby-aes-cext" => "= 1.0"
-Merb::BootLoader.after_app_loads do
-  # Add dependencies here that must load after the application loads:
+# dependency "merb-action-args"   # Provides support for querystring arguments to be passed in to controller actions
+# dependency "merb-assets"        # Provides link_to, asset_path, auto_link, image_tag methods (and lots more)
+# dependency "merb-cache"         # Provides your application with caching functions 
+# dependency "merb-haml"          # Adds rake tasks and the haml generators to your merb app
+# dependency "merb-jquery"        # Provides a #jquery method to insert jQuery code in to a content block
+# dependency "merb-mailer"        # Integrates mail support via Merb Mailer
 
-  # dependency "magic_admin" # this gem uses the app's model classes
+# These are a few, but not all, of the merb-plugin dependencies:
+#
+# dependency "merb_helpers"           # Provides the form, date/time, and other helpers
+# dependency "merb_param_protection"  # Lets you have better control over your query string params and param logging
+# dependency "merb_stories"           # Provides rspec helper methods for your application
+
+# Miscellaneous dependencies:
+#
+# Specify more than one dependency at a time with the #dependencies method:
+# dependencies "RedCloth", "BlueCloth"
+
+# Specify a specific version of a dependency
+# dependency "RedCloth", "> 3.0"
+
+# Specify more than one dependency at a time as well as the version:
+# dependencies "RedCloth" => "> 3.0", "BlueCloth" => "= 1.0.0"
+
+# You can also add in dependencies after your application loads.
+Merb::BootLoader.after_app_loads do
+  # For example, the magic_admin gem uses the app's model classes. This requires that the models be 
+  # loaded already. So, we can put the magic_admin dependency here:
+  # dependency "magic_admin"
 end
 
 #
@@ -93,7 +106,18 @@ end
 # merb-core provides support for RSpec.
 #
 # use_test :test_unit
-# use_test :rspec
+use_test :rspec
+
+
+#
+# ==== Choose which template engine to use by default
+#
+
+# Merb can generate views for different template engines, choose your favourite as the default.
+
+use_template_engine :erb
+# use_template_engine :haml
+
 
 #
 # ==== Set up your basic configuration
@@ -116,11 +140,12 @@ Merb::Config.use do |c|
   # c[:session_id_key] = '_session_id'
   
   # The session_secret_key is only required for the cookie session store.
-  c[:session_secret_key]  = '41bfa4ec7f06cb03cd372d3a4a24bde0456384c8'
+  c[:session_secret_key]  = '890e00ae53b029ddb89dae8fa54cfde0b5e34eed'
   
   # There are various options here, by default Merb comes with 'cookie', 
-  # 'memory' or 'memcached'.  You can of course use your favorite ORM 
-  # instead: 'datamapper', 'sequel' or 'activerecord'.
+  # 'memory', 'memcache' or 'container'.  
+  # You can of course use your favorite ORM instead: 
+  # 'datamapper', 'sequel' or 'activerecord'.
   c[:session_store] = 'cookie'
 end
 
@@ -128,22 +153,22 @@ end
 # ==== Tune your inflector
 
 # To fine tune your inflector use the word, singular_word and plural_word
-# methods of Language::English::Inflector module metaclass.
+# methods of English::Inflect module metaclass.
 #
 # Here we define erratum/errata exception case:
 #
-# Language::English::Inflector.word "erratum", "errata"
+# English::Inflect.word "erratum", "errata"
 #
 # In case singular and plural forms are the same omit
 # second argument on call:
 #
-# Language::English::Inflector.word 'information'
+# English::Inflect.word 'information'
 #
 # You can also define general, singularization and pluralization
 # rules:
 #
 # Once the following rule is defined:
-# Language::English::Inflector.rule 'y', 'ies'
+# English::Inflect.rule 'y', 'ies'
 #
 # You can see the following results:
 # irb> "fly".plural
@@ -153,14 +178,14 @@ end
 #
 # Example for singularization rule:
 #
-# Language::English::Inflector.singular_rule 'o', 'oes'
+# English::Inflect.singular_rule 'o', 'oes'
 #
 # Works like this:
 # irb> "heroes".singular
 # => hero
 #
 # Example of pluralization rule:
-# Language::English::Inflector.singular_rule 'fe', 'ves'
+# English::Inflect.singular_rule 'fe', 'ves'
 #
 # And the result is:
 # irb> "wife".plural
