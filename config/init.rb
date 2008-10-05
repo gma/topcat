@@ -21,6 +21,11 @@
 # code and views.
 #
 
+dependency "merb-assets"
+dependency "merb-haml"
+use_template_engine :haml
+
+
 Merb::Config.use do |c|
 
   # Sets up a custom session id key which is used for the session persistence
@@ -36,4 +41,5 @@ Merb::Config.use do |c|
   # 'datamapper', 'sequel' or 'activerecord'.
   c[:session_store] = 'cookie'
   
+  c[:reload_templates] = true
 end

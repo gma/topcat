@@ -21,9 +21,9 @@ if defined?(Merb::Plugins)
   module Topcat
     
     # Slice metadata
-    self.description = "Topcat is a chunky Merb slice!"
+    self.description = "Topcat is a CMS for plugging into your app"
     self.version = "0.0.1"
-    self.author = "YOUR NAME"
+    self.author = "Graham Ashton"
     
     # Stub classes loaded hook - runs before LoadClasses BootLoader
     # right after a slice's classes have been loaded internally.
@@ -55,7 +55,8 @@ if defined?(Merb::Plugins)
       # example of a named route
       scope.match('/index(.:format)').to(:controller => 'main', :action => 'index').name(:index)
       # the slice is mounted at /topcat - note that it comes before default_routes
-      scope.match('/').to(:controller => 'main', :action => 'index').name(:home)
+      scope.match('/').to(:controller => 'pages', :action => 'index').name(:home)
+      scope.resources :pages
     end
     
   end
